@@ -62,16 +62,28 @@
     <!-- Аудио плееры -->
     <audio id="noMusic" loop><source src="no_music.mp3" type="audio/mpeg"></audio>
     <audio id="yesMusic" loop><source src="yes_music.mp3" type="audio/mpeg"></audio>
+    
+    <!-- ГЛАВНЫЙ ЭКРАН С ВЫБОРОМ -->
+<div class="container" id="mainSection">
+    <h1 style="margin-bottom: 20px;">ВЫБЕРИ СВОЮ СУДЬБУ</h1>
+    
+    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <!-- Карточка ДА -->
+        <div onclick="selectYes()" style="flex: 1; cursor: pointer; border: 1px solid var(--cyan); padding: 10px; transition: 0.3s;" onmouseover="this.style.boxShadow='0 0 15px var(--cyan)'" onmouseout="this.style.boxShadow='none'">
+            <img src="yes_photo.jpg" alt="YES" style="width: 100%; height: 120px; object-fit: cover; margin-bottom: 10px;">
+            <div style="color: var(--cyan); font-size: 12px; font-weight: bold;">[ ACCEPT ]</div>
+        </div>
 
-    <!-- ГЛАВНЫЙ ЭКРАН -->
-    <div class="container" id="mainSection">
-        <img src="photo.jpg" alt="You" class="main-img">
-        <h1>будешь моей тянкой?</h1>
-        <div class="btn-group">
-            <button class="btn" id="yesBtn" onclick="selectYes()">EXECUTE_YES</button>
-            <button class="btn" id="noBtn" onclick="selectNo()">REJECT_CONNECTION</button>
+        <!-- Карточка НЕТ -->
+        <div onclick="selectNo()" style="flex: 1; cursor: pointer; border: 1px solid #444; padding: 10px; transition: 0.3s;" id="noCard">
+            <img src="no_photo.jpg" alt="NO" style="width: 100%; height: 120px; object-fit: cover; margin-bottom: 10px; filter: grayscale(1);">
+            <div style="color: #444; font-size: 12px; font-weight: bold;">[ REJECT ]</div>
         </div>
     </div>
+
+    <h1 style="font-size: 14px; color: var(--neon);">будешь моей тянкой?</h1>
+</div>
+
 
     <!-- ЭКРАН УСПЕХА -->
     <div class="container hidden" id="happySection">
