@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TERMINAL_CONNECTION_STABLE</title>
+    <title>TERMINAL_SELECTION</title>
     <style>
         :root { --neon: #ff00ff; --cyan: #00ffff; --bg: #0a000a; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -14,40 +14,43 @@
             font-family: 'Courier New', monospace; overflow: hidden; color: white; 
         }
 
-        /* Основной контейнер */
         .container { 
-            width: 95%; max-width: 400px; text-align: center; z-index: 10; 
-            background: rgba(0, 0, 0, 0.95); padding: 25px; 
+            width: 95%; max-width: 450px; text-align: center; z-index: 10; 
+            background: rgba(0, 0, 0, 0.95); padding: 20px; 
             border: 1px solid var(--neon); box-shadow: 0 0 20px var(--neon); 
         }
 
-        /* Твое фото без эффектов */
-        .main-img { 
-            width: 100%; height: 280px; object-fit: cover; 
-            border: 1px solid #333; margin-bottom: 20px;
-            filter: none !important; opacity: 1 !important;
+        h1 { font-size: 16px; letter-spacing: 2px; text-shadow: 2px 2px var(--neon); text-transform: uppercase; margin-bottom: 20px; }
+
+        /* Сетка для карточек выбора */
+        .selection-grid { 
+            display: flex; gap: 15px; margin-bottom: 10px; 
         }
 
-        h1 { font-size: 18px; letter-spacing: 2px; text-shadow: 2px 2px var(--neon); text-transform: uppercase; margin-bottom: 30px; }
-
-        .btn-group { display: flex; flex-direction: column; gap: 15px; }
-
-        .btn { 
-            padding: 15px; width: 100%; 
-            background: transparent; border: 1px solid var(--neon); 
-            color: var(--neon); font-family: inherit; font-weight: bold; 
-            cursor: pointer; text-transform: uppercase; transition: 0.2s;
+        .choice-card {
+            flex: 1; border: 1px solid #333; padding: 10px; cursor: pointer;
+            transition: 0.3s; position: relative; overflow: hidden;
         }
 
-        #yesBtn { background: rgba(255, 0, 255, 0.1); box-shadow: 0 0 15px var(--neon); }
-        #noBtn { border-color: #444; color: #444; }
+        .choice-card img {
+            width: 100%; height: 150px; object-fit: cover; 
+            filter: grayscale(0.8); transition: 0.3s;
+        }
 
-        /* Эффект нажатия */
-        .btn:active { transform: scale(0.98); background: var(--neon); color: black; }
+        .choice-label {
+            margin-top: 10px; font-weight: bold; font-size: 12px; letter-spacing: 1px;
+        }
+
+        /* Эффекты при наведении/активации */
+        #yesCard:hover { border-color: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
+        #yesCard:hover img { filter: grayscale(0); }
+        #yesCard:hover .choice-label { color: var(--cyan); }
+
+        #noCard:hover { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+        #noCard:hover .choice-label { color: #ff0000; }
 
         .hidden { display: none; }
         
-        /* Экран после "ДА" */
         #timer { 
             font-size: 1.2rem; color: var(--cyan); margin: 20px 0; 
             border: 1px dashed var(--cyan); padding: 15px; 
@@ -59,70 +62,58 @@
 </head>
 <body>
 
-    <!-- Аудио плееры -->
     <audio id="noMusic" loop><source src="no_music.mp3" type="audio/mpeg"></audio>
     <audio id="yesMusic" loop><source src="yes_music.mp3" type="audio/mpeg"></audio>
-    
-    <!-- ГЛАВНЫЙ ЭКРАН С ВЫБОРОМ -->
-<div class="container" id="mainSection">
-    <h1 style="margin-bottom: 20px;">ВЫБЕРИ СВОЮ СУДЬБУ</h1>
-    
-    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-        <!-- Карточка ДА -->
-        <div onclick="selectYes()" style="flex: 1; cursor: pointer; border: 1px solid var(--cyan); padding: 10px; transition: 0.3s;" onmouseover="this.style.boxShadow='0 0 15px var(--cyan)'" onmouseout="this.style.boxShadow='none'">
-            <img src="yes_photo.jpg" alt="YES" style="width: 100%; height: 120px; object-fit: cover; margin-bottom: 10px;">
-            <div style="color: var(--cyan); font-size: 12px; font-weight: bold;">[ ACCEPT ]</div>
-        </div>
 
-        <!-- Карточка НЕТ -->
-        <div onclick="selectNo()" style="flex: 1; cursor: pointer; border: 1px solid #444; padding: 10px; transition: 0.3s;" id="noCard">
-            <img src="no_photo.jpg" alt="NO" style="width: 100%; height: 120px; object-fit: cover; margin-bottom: 10px; filter: grayscale(1);">
-            <div style="color: #444; font-size: 12px; font-weight: bold;">[ REJECT ]</div>
+    <!-- ГЛАВНЫЙ ЭКРАН ВЫБОРА -->
+    <div class="container" id="mainSection">
+        <h1>INITIALIZING_PROPOSAL...</h1>
+        
+        <div class="selection-grid">
+            <!-- КАРТОЧКА ДА -->
+            <div class="choice-card" id="yesCard" onclick="selectYes()">
+                <img src="yes_photo.jpg" alt="YES">
+                <div class="choice-label">EXECUTE_YES.exe</div>
+            </div>
+
+            <!-- КАРТОЧКА НЕТ -->
+            <div class="choice-card" id="noCard" onclick="selectNo()">
+                <img src="no_photo.jpg" alt="NO">
+                <div class="choice-label">REJECT_VOID.bin</div>
+            </div>
         </div>
+        
+        <p style="font-size: 12px; color: var(--neon); margin-top: 15px;">будешь моей тянкой?</p>
     </div>
-
-    <h1 style="font-size: 14px; color: var(--neon);">будешь моей тянкой?</h1>
-</div>
-
 
     <!-- ЭКРАН УСПЕХА -->
     <div class="container hidden" id="happySection">
-        <img src="photo.jpg" class="main-img" style="height: 300px; border-color: var(--cyan);" alt="Success">
-        <h1 style="color: var(--cyan); text-shadow: 0 0 10px var(--cyan);">CONNECTION_STABLE</h1>
+        <img src="yes_photo.jpg" style="width: 100%; height: 250px; object-fit: cover; border: 1px solid var(--cyan);" alt="Success">
+        <h1 style="color: var(--cyan); text-shadow: 0 0 10px var(--cyan); margin-top: 20px;">CONNECTION_STABLE</h1>
         <div id="timer">INITIALIZING...</div>
         <p style="font-size: 10px; color: #444; letter-spacing: 2px;">вот столько мы сидим вместе в фудкорте</p>
     </div>
 
     <script>
-        // --- НАСТРОЙКИ ДАТЫ ---
-        // (Год, месяц минус 1, день). Пример: 15 марта 2024 -> (2024, 2, 15)
-        const startDate = new Date(2025, 9, 6); 
-
+        const startDate = new Date(2024, 9, 6); // Установил 2024 год, чтобы таймер уже шел
         const noMusic = document.getElementById('noMusic');
         const yesMusic = document.getElementById('yesMusic');
         const main = document.getElementById('mainSection');
         const happy = document.getElementById('happySection');
 
-        // Логика кнопки "НЕТ"
         function selectNo() {
-            yesMusic.pause(); // Останавливаем музыку "Да", если она вдруг играла
+            yesMusic.pause();
+            noMusic.currentTime = 48; 
+            noMusic.play().catch(() => {});
             
-            // --- ВРЕМЯ НАЧАЛА ДЛЯ NO_MUSIC (в секундах) ---
-            noMusic.currentTime = 48; // Поставь секунды здесь
-            
-            noMusic.play().catch(() => { console.log("Нужен клик для звука"); });
-            document.getElementById('noBtn').innerText = 'ERROR_VOID';
-            document.getElementById('noBtn').style.color = 'red';
-            document.getElementById('noBtn').style.borderColor = 'red';
+            const label = document.querySelector('#noCard .choice-label');
+            label.innerText = 'ERROR_FATAL';
+            document.getElementById('noCard').style.borderColor = 'red';
         }
 
-        // Логика кнопки "ДА"
         function selectYes() {
-            noMusic.pause(); // Останавливаем музыку "Нет"
-            
-            // --- ВРЕМЯ НАЧАЛА ДЛЯ YES_MUSIC (в секундах) ---
-            yesMusic.currentTime = 32; // Поставь секунды здесь
-            
+            noMusic.pause();
+            yesMusic.currentTime = 32; 
             yesMusic.play().catch(() => {});
             
             main.classList.add('hidden');
@@ -132,7 +123,6 @@
             setInterval(createGlitchHeart, 150);
         }
 
-        // Функция таймера
         function updateTimer() {
             const diff = new Date() - startDate;
             const d = Math.floor(diff / 86400000);
@@ -142,7 +132,6 @@
             document.getElementById('timer').innerText = `${d}D:${h}H:${m}M:${s}S`;
         }
 
-        // Эффект падающих символов
         function createGlitchHeart() {
             const el = document.createElement('div');
             el.className = 'glitch-item';
@@ -151,16 +140,14 @@
             el.style.top = '-5vh';
             el.style.fontSize = Math.random() * 20 + 10 + 'px';
             el.style.transition = 'transform 3s linear, opacity 3s';
-            
             document.body.appendChild(el);
-            
             setTimeout(() => {
                 el.style.transform = `translateY(110vh) rotate(${Math.random() * 360}deg)`;
                 el.style.opacity = '0';
             }, 100);
-
             setTimeout(() => el.remove(), 4000);
         }
     </script>
 </body>
 </html>
+
